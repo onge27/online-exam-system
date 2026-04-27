@@ -1,0 +1,228 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-msg {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="page-content">
+  <style>
+    :root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222636;
+  --border: #2e3248;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+
+  --primary: #3b82f6;
+  --danger: #ef4444;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+/* PAGE WRAPPER */
+.page-content {
+  padding: 20px;
+}
+
+/* CARD */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* HEADER */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+}
+
+/* TABLE */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.results-table thead {
+  background: var(--surface2);
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  text-align: left;
+}
+
+.results-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* FLEX */
+.flex {
+  display: flex;
+}
+
+.gap-3 {
+  gap: 10px;
+}
+
+/* BUTTON BASE */
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  display: inline-block;
+}
+
+/* BUTTON TYPES */
+.btn-sm {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  background: var(--surface2);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+/* FLASH MESSAGE */
+.flash-container {
+  margin-bottom: 15px;
+}
+
+.flash-msg {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.flash-msg.success {
+  background: #14532d;
+  color: #22c55e;
+}
+
+.flash-msg.error {
+  background: #450a0a;
+  color: #ef4444;
+}
+
+.flash-msg.info {
+  background: #1e3a8a;
+  color: #60a5fa;
+}
+  </style>
+
+  <div class="card">
+
+    <!-- HEADER -->
+    <div class="card-header">
+      <h3>📚 Manage Exams</h3>
+
+      <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-ghost btn-sm">
+        ← Back
+      </a>
+    </div>
+
+    <!-- TABLE -->
+    <div style="overflow-x:auto;">
+
+      <table class="results-table">
+
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Subject</th>
+            <th>Timer (mins)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for e in exams %}
+          <tr>
+            <td>{{ e.title }}</td>
+            <td>{{ e.subject_name }}</td>
+            <td>{{ e.timer_minutes }}</td>
+
+            <td class="flex gap-3">
+
+              <!-- VIEW (FIXED OPTION) -->
+              <a href="{{ url_for('teacher.add_questions', exam_id=e.id) }}"
+                 class="btn btn-ghost btn-sm">
+                👁 View
+              </a>
+
+              <!-- EDIT -->
+              <a href="{{ url_for('teacher.edit_exam', exam_id=e.id) }}"
+                 class="btn btn-primary btn-sm">
+                ✏ Edit
+              </a>
+
+              <!-- DELETE -->
+              <form method="POST"
+                    action="{{ url_for('teacher.delete_exam', exam_id=e.id) }}"
+                    onsubmit="return confirm('Are you sure you want to delete this exam?');">
+
+                <button type="submit"
+                        class="btn btn-danger btn-sm">
+                  🗑 Delete
+                </button>
+
+              </form>
+
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

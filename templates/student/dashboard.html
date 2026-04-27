@@ -1,0 +1,95 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Student Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Student / Available Exams{% endblock %}
+
+{% block sidebar_nav %}
+<div class="nav-section">
+  <div class="nav-label">Main</div>
+  <a class="nav-item active" href="{{ url_for('student.dashboard') }}"><span class="icon">🏠</span> Dashboard</a>
+</div>
+{% endblock %}
+
+{% block content %}
+
+<!-- Available Exams -->
+<div class="card mb-6">
+  <div class="card-header">
+    <h3>📋 Available Exams</h3>
+  </div>
+  {% if available_exams %}
+  <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:16px;">
+    {% for exam in available_exams %}
+    <div style="background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:18px; position:relative; overflow:hidden;">
+      {% if exam.id in completed_ids %}
+      <div style="position:absolute; top:12px; right:12px;">
+        <span class="badge badge-success">✅ Done</span>
+      </div>
+      {% endif %}
+      <span class="badge badge-info" style="margin-bottom:10px; display:inline-block;">{{ exam.subject_name }}</span>
+      <h4 style="font-size:0.95rem; font-weight:600; margin-bottom:6px;">{{ exam.title }}</h4>
+      <p class="text-muted text-sm mb-3">
+        👨‍🏫 {{ exam.teacher_name }} &nbsp;|&nbsp;
+        ❓ {{ exam.question_count }} questions &nbsp;|&nbsp;
+        ⏱️ {{ exam.timer_minutes }} min
+      </p>
+      {% if exam.id in completed_ids %}
+      <a href="{{ url_for('student.result', exam_id=exam.id) }}" class="btn btn-ghost btn-sm">View Result</a>
+      {% else %}
+      <a href="{{ url_for('student.start_exam', exam_id=exam.id) }}" class="btn btn-primary btn-sm">Start Exam →</a>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <div class="empty-icon">📋</div>
+    <h3>No exams available</h3>
+    <p>Check back later when your teacher posts an exam.</p>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Completed Exams -->
+{% if completed_exams %}
+<div class="card">
+  <div class="card-header">
+    <h3>🏆 My Results</h3>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Exam</th>
+          <th>Course</th>
+          <th>Score</th>
+          <th>Percentage</th>
+          <th>Grade</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in completed_exams %}
+        <tr>
+          <td class="fw-600">{{ r.title }}</td>
+          <td><span class="badge badge-info">{{ r.subject_name }}</span></td>
+          <td>{{ r.score }}</td>
+          <td>{{ r.percentage }}%</td>
+          <td>
+            {% if r.percentage >= 90 %}<span class="badge badge-success">A</span>
+            {% elif r.percentage >= 80 %}<span class="badge badge-info">B</span>
+            {% elif r.percentage >= 70 %}<span class="badge badge-warn">C</span>
+            {% elif r.percentage >= 60 %}<span class="badge badge-warn">D</span>
+            {% else %}<span class="badge badge-danger">F</span>{% endif %}
+          </td>
+          <td>
+            <a href="{{ url_for('student.result', exam_id=r.exam_id) }}" class="btn btn-ghost btn-sm">View</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

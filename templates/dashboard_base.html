@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="app-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">
+        <div class="logo-icon">🎓</div>
+        <span>ExamSys</span>
+      </div>
+      <div class="badge">{{ session.role }}</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      {% block sidebar_nav %}{% endblock %}
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="avatar">{{ session.user_name[0].upper() }}</div>
+        <div>
+          <div class="name">{{ session.user_name }}</div>
+          <div class="role">{{ session.role }}</div>
+        </div>
+      </div>
+      <a href="{{ url_for('auth.logout') }}" class="btn btn-ghost btn-full btn-sm">
+        🚪 Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <div class="top-bar">
+      <div>
+        <h1>{% block page_title %}Dashboard{% endblock %}</h1>
+        <div class="breadcrumb">{% block breadcrumb %}Home{% endblock %}</div>
+      </div>
+      <div class="flex gap-2">
+        {% block top_actions %}{% endblock %}
+      </div>
+    </div>
+
+    <div class="page-content">
+      {% block content %}{% endblock %}
+    </div>
+  </div>
+</div>
+{% endblock %}

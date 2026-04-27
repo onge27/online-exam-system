@@ -1,0 +1,218 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-msg {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="page-content">
+    <style>
+        /* =========================
+   BASE THEME (GLOBAL COLORS)
+========================= */
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222636;
+  --border: #2e3248;
+
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+
+  --primary: #3b82f6;
+  --danger: #ef4444;
+}
+
+/* =========================
+   PAGE LAYOUT
+========================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+.page-content {
+  padding: 20px;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+/* =========================
+   TABLE (USED BY ALL PAGES)
+========================= */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.results-table thead {
+  background: var(--surface2);
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+}
+
+.results-table tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* =========================
+   BADGE (PERCENTAGE)
+========================= */
+.badge {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid var(--primary);
+  color: var(--text);
+  font-size: 12px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  background: var(--surface2);
+}
+
+/* =========================
+   FLASH MESSAGES
+========================= */
+.flash-container {
+  margin-bottom: 15px;
+}
+
+.flash-msg {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.flash-msg.success {
+  background: #14532d;
+  color: #22c55e;
+}
+
+.flash-msg.error {
+  background: #450a0a;
+  color: #ef4444;
+}
+
+.flash-msg.info {
+  background: #1e3a8a;
+  color: #60a5fa;
+}
+    </style>
+
+  <div class="card">
+
+    <!-- HEADER -->
+    <div class="card-header">
+      <h3>👁 Student Result</h3>
+
+      <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-ghost btn-sm">
+        ← Back
+      </a>
+    </div>
+
+    <!-- INFO SECTION -->
+    <div style="margin-bottom: 15px; color: var(--text); font-size: 14px;">
+
+      <p><b>Student:</b> {{ result.student_name }}</p>
+      <p><b>Email:</b> {{ result.email }}</p>
+      <p><b>Exam:</b> {{ result.exam_title }}</p>
+      <p><b>Score:</b> {{ result.score }}</p>
+
+      <p>
+        <b>Percentage:</b>
+        <span class="badge">
+          {{ result.percentage }}%
+        </span>
+      </p>
+
+    </div>
+
+    <hr style="border: 1px solid var(--border); margin: 15px 0;">
+
+    <!-- ANSWERS TABLE -->
+    <div style="overflow-x:auto;">
+
+      <table class="results-table">
+
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Answer</th>
+            <th>Correct Answer</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for a in answers %}
+          <tr>
+            <td>{{ a.question_text }}</td>
+            <td>{{ a.answer }}</td>
+            <td>{{ a.correct_answer }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

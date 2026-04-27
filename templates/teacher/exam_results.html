@@ -1,0 +1,212 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-msg {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="page-content">
+  <style>
+    :root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222636;
+  --border: #2e3248;
+
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+
+  --primary: #3b82f6;
+  --danger: #ef4444;
+}
+
+/* =========================
+   PAGE WRAPPER
+========================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "DM Sans", sans-serif;
+}
+
+.page-content {
+  padding: 20px;
+}
+
+/* =========================
+   CARD CONTAINER
+========================= */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.card-header h3 {
+  margin: 0;
+}
+
+/* =========================
+   TABLE STYLE
+========================= */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.results-table thead {
+  background: var(--surface2);
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+}
+
+.results-table tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* =========================
+   BADGE (PERCENTAGE)
+========================= */
+.badge {
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid var(--primary);
+  color: var(--text);
+  font-size: 12px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  background: var(--surface2);
+}
+
+/* =========================
+   FLASH MESSAGES
+========================= */
+.flash-container {
+  margin-bottom: 15px;
+}
+
+.flash-msg {
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.flash-msg.success {
+  background: #14532d;
+  color: #22c55e;
+}
+
+.flash-msg.error {
+  background: #450a0a;
+  color: #ef4444;
+}
+
+.flash-msg.info {
+  background: #1e3a8a;
+  color: #60a5fa;
+}
+  </style>
+
+  <div class="card">
+
+    <div class="card-header">
+      <h3>📊 Exam Results - {{ exam.title }}</h3>
+
+      <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-ghost btn-sm">
+        ← Back
+      </a>
+    </div>
+
+    <!-- RESULTS TABLE -->
+    <div style="overflow-x:auto;">
+
+      <table class="results-table">
+
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Email</th>
+            <th>Score</th>
+            <th>Percentage</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for r in results %}
+          <tr>
+            <td>{{ r.student_name }}</td>
+            <td>{{ r.email }}</td>
+            <td>{{ r.score }}</td>
+            <td>
+              <span class="badge">
+                {{ r.percentage }}%
+              </span>
+            </td>
+            <td>
+              <a href="{{ url_for('teacher.view_result', result_id=r.id) }}"
+                 class="btn btn-ghost btn-sm">
+                👁 View
+              </a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

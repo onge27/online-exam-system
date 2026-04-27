@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}ExamSys{% endblock %} | Online Exam System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- Flash Messages -->
+<div class="flash-container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash-msg {{ category }}">
+        <span>
+          {% if category == 'success' %}✅{% elif category == 'error' %}❌{% elif category == 'info' %}ℹ️{% else %}⚠️{% endif %}
+        </span>
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+{% block body %}{% endblock %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

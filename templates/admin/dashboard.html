@@ -1,0 +1,62 @@
+{% extends 'dashboard_base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block breadcrumb %}Admin / Overview{% endblock %}
+
+{% block sidebar_nav %}
+<div class="nav-section">
+  <div class="nav-label">Main</div>
+  <a class="nav-item active" href="{{ url_for('admin.dashboard') }}"><span class="icon">🏠</span> Dashboard</a>
+</div>
+<div class="nav-section">
+  <div class="nav-label">Manage</div>
+  <a class="nav-item" href="{{ url_for('admin.courses') }}"><span class="icon">📚</span> Courses</a>
+  <a class="nav-item" href="{{ url_for('admin.users') }}"><span class="icon">👥</span> Users</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card blue">
+    <div class="stat-icon">👥</div>
+    <div class="stat-value">{{ stats.total_users }}</div>
+    <div class="stat-label">Total Users</div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon">🎒</div>
+    <div class="stat-value">{{ stats.total_students }}</div>
+    <div class="stat-label">Students</div>
+  </div>
+  <div class="stat-card warn">
+    <div class="stat-icon">📚</div>
+    <div class="stat-value">{{ stats.total_teachers }}</div>
+    <div class="stat-label">Teachers</div>
+  </div>
+  <div class="stat-card blue">
+    <div class="stat-icon">📋</div>
+    <div class="stat-value">{{ stats.total_courses }}</div>
+    <div class="stat-label">Courses</div>
+  </div>
+  <div class="stat-card green">
+    <div class="stat-icon">📝</div>
+    <div class="stat-value">{{ stats.total_exams }}</div>
+    <div class="stat-label">Exams</div>
+  </div>
+  <div class="stat-card red">
+    <div class="stat-icon">🏆</div>
+    <div class="stat-value">{{ stats.total_results }}</div>
+    <div class="stat-label">Submissions</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h3>Quick Actions</h3>
+  </div>
+  <div class="flex gap-3" style="flex-wrap:wrap;">
+    <a href="{{ url_for('admin.add_course') }}" class="btn btn-primary">➕ Add Course</a>
+    <a href="{{ url_for('admin.courses') }}" class="btn btn-ghost">📚 Manage Courses</a>
+    <a href="{{ url_for('admin.users') }}" class="btn btn-ghost">👥 Manage Users</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,238 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash-msg {{ category }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="page-content">
+
+  <div class="card">
+    <style>
+      :root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #222636;
+  --border: #2e3248;
+
+  --text: #e6e6e6;
+  --muted: #9aa4b2;
+
+  --primary: #4f7cff;
+  --danger: #ff4d4d;
+  --success: #22c55e;
+}
+
+/* PAGE */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+}
+
+.page-content {
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+/* CARD */
+.card {
+  width: 100%;
+  max-width: 900px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+/* HEADER */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* FORM */
+.form-group {
+  margin-bottom: 14px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  outline: none;
+}
+
+textarea.form-control {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* ROW */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+/* BUTTONS */
+.btn {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-sm {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+/* FLASH MESSAGES */
+.flash-container {
+  margin-bottom: 16px;
+}
+
+.flash-msg {
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.flash-msg.success {
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid var(--success);
+}
+
+.flash-msg.error {
+  background: rgba(255, 77, 77, 0.15);
+  border: 1px solid var(--danger);
+}
+
+/* MCQ BOX */
+#mcq {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+/* UTIL */
+.mt-4 { margin-top: 16px; }
+.flex { display: flex; }
+.gap-3 { gap: 12px; }
+    </style>
+
+    <!-- HEADER -->
+    <div class="card-header">
+      <h3>➕ Add Question</h3>
+
+      <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-ghost btn-sm">
+        ← Back
+      </a>
+    </div>
+
+    <!-- FORM -->
+    <form method="POST">
+
+      <!-- QUESTION -->
+      <div class="form-group">
+        <label>Question</label>
+        <textarea name="question_text" required class="form-control"></textarea>
+      </div>
+
+      <!-- TYPE -->
+      <div class="form-group">
+        <label>Type</label>
+        <select name="type" id="qtype" class="form-control">
+          <option value="multiple_choice">Multiple Choice</option>
+          <option value="true_false">True/False</option>
+          <option value="essay">Essay</option>
+        </select>
+      </div>
+
+      <!-- MCQ BOX -->
+      <div id="mcq" class="card" style="padding:16px; margin-top:16px;">
+
+        <div class="card-header" style="margin-bottom:12px;">
+          <h3 style="font-size:0.95rem;">Choices (A–H)</h3>
+        </div>
+
+        <div class="form-row">
+
+          {% for letter in "ABCDEFGH" %}
+          <div class="form-group">
+            <label>Choice {{ letter }}</label>
+            <input name="choice_{{letter}}"
+                   class="form-control"
+                   placeholder="Enter choice {{ letter }}">
+          </div>
+          {% endfor %}
+
+        </div>
+
+      </div>
+
+      <!-- CORRECT ANSWER -->
+      <div class="form-group mt-4">
+        <label>Correct Answer</label>
+        <input name="correct_answer"
+               class="form-control"
+               placeholder="Example: A / B / True / Essay keyword">
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex gap-3 mt-4">
+
+        <button type="submit" class="btn btn-primary">
+          💾 Save Question
+        </button>
+
+        <a href="{{ url_for('teacher.dashboard') }}" class="btn btn-ghost">
+          Cancel
+        </a>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Exam</title>
+
+    <!-- Google Fonts (same as your system) -->
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* ── USE YOUR ROOT VARIABLES ── */
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --border: #2e3248;
+            --accent: #6c63ff;
+            --accent2: #00d4aa;
+            --text: #e8eaf0;
+            --text-muted: #7b8099;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 60px auto;
+            padding: 30px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 48px rgba(0,0,0,0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        h2 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--text);
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            background: #0f1117;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            outline: none;
+            transition: var(--transition);
+        }
+
+        select:focus, input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(108,99,255,0.18);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108,99,255,0.25);
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .back:hover {
+            color: var(--accent);
+        }
+
+        /* subtle glow background */
+        .container::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(108,99,255,0.12), transparent 70%);
+            top: -80px;
+            right: -80px;
+            z-index: -1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Create Exam</h2>
+
+    <form method="POST">
+
+        <label>Course</label>
+        <select name="subject_id" required>
+            {% for c in courses %}
+            <option value="{{c.id}}">
+                {{c.subject_name}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <label>Exam Title</label>
+        <input type="text" name="title" placeholder="Enter exam title" required>
+
+        <label>Timer (minutes)</label>
+        <input type="number" name="timer_minutes" value="30" min="1">
+
+        <button type="submit">Create Exam</button>
+
+    </form>
+
+    <a class="back" href="/teacher/dashboard">← Back to Dashboard</a>
+
+</div>
+
+</body>
+</html>

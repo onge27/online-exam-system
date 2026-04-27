@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}{{ exam.title }}{% endblock %}
+
+{% block body %}
+<div style="min-height:100vh; background:var(--bg);">
+
+  <!-- Exam Header with Timer -->
+  <div class="exam-header">
+    <div>
+      <div style="font-weight:600; font-size:1rem;">{{ exam.title }}</div>
+      <div class="text-muted text-sm">{{ exam.subject_name }} &nbsp;|&nbsp; {{ questions|length }} questions</div>
+    </div>
+    <div class="timer-box">
+      <span style="font-size:0.8rem; color:var(--text-muted);">⏱️ Time Left:</span>
+      <span class="timer-display" id="timer-display">{{ '%02d'|format(exam.timer_minutes) }}:00</span>
+    </div>
+  </div>
+
+  <!-- Exam Form -->
+  <form method="POST" action="{{ url_for('student.submit_exam', exam_id=exam.id) }}" id="exam-form">
+    <div style="max-width:760px; margin:0 auto; padding:32px 20px;">
+
+      {% for q in questions %}
+      <div class="question-card">
+        <div class="question-num">Question {{ loop.index }} of {{ questions|length }}</div>
+        <div class="question-text">{{ q.question_text }}</div>
+
+        {% if q.type == 'multiple_choice' %}
+        <div class="choices">
+          {% for choice in q.choices %}
+          <label class="choice-label">
+            <input type="radio" name="question_{{ q.id }}" value="{{ choice.label }}"/>
+            <strong>{{ choice.label }}.</strong> {{ choice.text }}
+          </label>
+          {% endfor %}
+        </div>
+
+        {% elif q.type == 'true_false' %}
+        <div class="choices">
+          <label class="choice-label">
+            <input type="radio" name="question_{{ q.id }}" value="True"/>
+            <strong>True</strong>
+          </label>
+          <label class="choice-label">
+            <input type="radio" name="question_{{ q.id }}" value="False"/>
+            <strong>False</strong>
+          </label>
+        </div>
+
+        {% elif q.type == 'essay' %}
+        <textarea name="question_{{ q.id }}" class="form-control"
+                  placeholder="Write your answer here..."
+                  style="min-height:140px;"></textarea>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <div style="display:flex; justify-content:center; gap:16px; margin-top:24px;">
+        <button type="submit"
+                class="btn btn-success"
+                onclick="return confirm('Submit exam? You cannot change answers after submission.')"
+                style="padding:12px 32px; font-size:1rem;">
+          ✅ Submit Exam
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  startExamTimer({{ exam.timer_minutes }} * 60);
+</script>
+{% endblock %}
